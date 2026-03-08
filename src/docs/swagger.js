@@ -6,7 +6,7 @@ const options = {
         info: {
             title: "Order API",
             version: "1.0.0",
-            description: "API Desafio JitterBIT Gerenciamento de pedidos"
+            description: "API Desafio JitterBIT -  Gerenciamento de pedidos"
         },
         servers: [
             {

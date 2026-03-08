@@ -4,8 +4,6 @@ const controller = require("../controllers/orderController");
 
 const router = express.Router();
 
-
-
 /**
  * @swagger
  * /order:

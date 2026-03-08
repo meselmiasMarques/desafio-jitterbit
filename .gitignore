@@ -1,0 +1,24 @@
+# node modules
+node_modules/
+
+# arquivos de ambiente
+.env
+
+# logs
+logs
+*.log
+npm-debug.log*
+
+# sistema
+.DS_Store
+Thumbs.db
+
+# build
+dist/
+build/
+
+# coverage de testes
+coverage/
+
+# arquivos temporários
+.tmp

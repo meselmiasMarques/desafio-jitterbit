@@ -27,9 +27,22 @@ async function deleteOrder(orderId){
     return await repository.deleteOrder(orderId);
 }
 
+async function updateOrder(orderId, data){
+
+    const order = mapper.mapToOrderEntity({
+        numeroPedido: orderId,
+        valorTotal: data.valorTotal,
+        dataCriacao: new Date(),
+        items: data.items
+    });
+
+    return await repository.updateOrder(orderId, order);
+}
+
 module.exports = {
     createOrder,
     getOrder,
     listOrders,
-    deleteOrder
+    deleteOrder,
+    updateOrder
 };

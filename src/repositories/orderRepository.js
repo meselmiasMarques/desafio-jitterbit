@@ -75,9 +75,64 @@ async function deleteOrder(orderId) {
         .query("DELETE FROM Orders WHERE orderId = @orderId");
 }
 
+async function updateOrder(orderId, order) {
+
+    const connection = await pool;
+
+    const transaction = new sql.Transaction(connection);
+
+    try {
+
+        await transaction.begin();
+
+        // Atualiza pedido
+        await new sql.Request(transaction)
+            .input("orderId", sql.VarChar, orderId)
+            .input("value", sql.Decimal(18,2), order.value)
+            .query(`
+                UPDATE Orders
+                SET value = @value
+                WHERE orderId = @orderId
+            `);
+
+        // Remove itens antigos
+        await new sql.Request(transaction)
+            .input("orderId", sql.VarChar, orderId)
+            .query(`
+                DELETE FROM Items
+                WHERE orderId = @orderId
+            `);
+
+        // Insere novos itens
+        for(const item of order.items){
+
+            await new sql.Request(transaction)
+                .input("orderId", sql.VarChar, orderId)
+                .input("productId", sql.Int, item.productId)
+                .input("quantity", sql.Int, item.quantity)
+                .input("price", sql.Decimal(18,2), item.price)
+                .query(`
+                    INSERT INTO Items(orderId,productId,quantity,price)
+                    VALUES(@orderId,@productId,@quantity,@price)
+                `);
+        }
+
+        await transaction.commit();
+
+        return true;
+
+    } catch(error){
+
+        await transaction.rollback();
+        throw error;
+
+    }
+}
+
 module.exports = {
     createOrder,
     getOrderById,
     listOrders,
-    deleteOrder
+    deleteOrder,
+    updateOrder
 };

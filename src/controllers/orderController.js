@@ -59,9 +59,29 @@ async function remove(req,res){
     }
 }
 
+async function update(req,res){
+
+    try{
+
+        await service.updateOrder(req.params.orderId, req.body);
+
+        return res.status(200).json({
+            message: "Pedido atualizado com sucesso"
+        });
+
+    }catch(error){
+
+        return res.status(500).json({
+            error: error.message
+        });
+
+    }
+}
+
 module.exports = {
     create,
     get,
     list,
-    remove
+    remove,
+    update
 };
